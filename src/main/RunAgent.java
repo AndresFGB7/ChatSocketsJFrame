@@ -15,20 +15,23 @@ import view.Message;
 import view.Panel;
 import view.Window;
 
-public class Agente {
+public class RunAgent {
 	private static Window v;
 	private DataOutputStream out;
 	private DataInputStream in;
 	private static Socket socket;
 	private static ArrayList<Panel> paneles;
 	private Panel panel;
-	private Message m = new Message();
+	private Message m;
 
-	public Agente(Socket s) throws Exception {
+	public RunAgent(Socket s, int puerto) throws Exception {
+		m = new Message();
 		socket = s;
-		var answer = m.inputMessage("Desea aceptar un nuevo ciudadano?\n" + "(1) Aceptar\n" + "(2) Denegar");
+		var answer = m.inputMessage("Agente en el puerto: "+puerto+"\nDesea aceptar un nuevo ciudadano?\n" + "(1) Aceptar\n" + "(2) Denegar");
 		if (answer.contains("1")) {
 			v.setTitle("Agente en linea");
+			out = new DataOutputStream(socket.getOutputStream());
+			out.writeUTF("Se acepto el cliente jaja");
 			panel = new Panel();
 			paneles.add(panel);
 			v.getPestañas().add(panel);
@@ -38,7 +41,6 @@ public class Agente {
 			socket = s;
 		} else {
 			s.close();
-			throw new Exception("Refused by my");
 		}
 
 	}
@@ -48,19 +50,17 @@ public class Agente {
 		paneles = new ArrayList<Panel>();
 		v = new Window();
 		var port = 4060;
-		var contador = 0;
-		var pool = Executors.newFixedThreadPool(5);
+		var pool = Executors.newFixedThreadPool(100);
 		var isRunning = false;
 		do {
 			v.setTitle("Esperando un nuevo ciudadano... estas en el puerto " + port);
 
 			try (var listener = new ServerSocket(port)) {
 				while (true) {
-					var agent = new Agente(listener.accept());
+					var agent = new RunAgent(listener.accept(),port);
 					pool.execute(agent.run());
 				}
 			} catch (BindException e) {
-				contador++;
 				isRunning = true;
 				port++;
 			} catch (Exception e) {
@@ -82,7 +82,7 @@ public class Agente {
 						public void actionPerformed(ActionEvent e) {
 							try {
 								panel.getMessageArea().append("\nUsted: "+panel.getTextField().getText());
-								out.writeUTF("Agente: "+panel.getTextField().getText());
+								out.writeUTF("\nAgente: "+panel.getTextField().getText());
 								out.flush();
 							} catch (IOException e1) {
 								e1.printStackTrace();
@@ -96,7 +96,7 @@ public class Agente {
 							if (input.toLowerCase().startsWith("/quit")) {
 								return;
 							} else {
-								panel.getMessageArea().append(input + "\n");
+								panel.getMessageArea().append(input );
 							}
 						} catch (Exception e) {
 						}
@@ -104,7 +104,7 @@ public class Agente {
 					}
 
 				} catch (IOException e) {
-					e.printStackTrace();
+					
 				}
 			}
 		});

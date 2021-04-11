@@ -15,7 +15,7 @@ import java.util.List;
 
 public class RunCiudadano {
 	Message m = new Message() ;
-
+	int numCiudadanos=0;
 	private String[] dataPet = new String[] { "(1) Especie", "(2) Tamaño", "(3) Localidad", "(4) Dirección",
 			"(5) Nombre completo de la persona que reporta", "(6) Teléfono de la persona que reporta ",
 			"(7) Email de la persona que reporta", "(8) Comentarios generales" }; // Info to submit of pet
@@ -99,6 +99,7 @@ public class RunCiudadano {
 				try {
 					// Create a new Citizen in a specified port
 					Ciudadano chatCitizen = new Ciudadano("127.0.0.1", port);
+					numCiudadanos++;
 				} catch (Exception e) {
 					System.out.println("fuck");
 					port++;

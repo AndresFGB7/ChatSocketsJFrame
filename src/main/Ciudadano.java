@@ -13,7 +13,7 @@ import view.Message;
 import view.Panel;
 import view.Window;
 
-public class Ciudadano  {
+public class Ciudadano {
 	private Window v;
 	private DataOutputStream out;
 	private DataInputStream in;
@@ -24,20 +24,23 @@ public class Ciudadano  {
 
 	public Ciudadano(String adressServer, int port) {
 		this.puerto = port;
-		isAccepted = true;
-		m = new Message();
-		v = new Window();
-		panel = new Panel();
-		v.getContentPane().removeAll();
-		v.getPestañas().add(panel);
-		v.getContentPane().add(v.getPestañas());
-		v.getPestañas().setTitleAt(0, "Pestaña 1");
-		v.repaint();
-		panel.getMessageArea().append("Esperando que un agente tome el chat...");
+		
+		
 		Thread hilo = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				do {
+					isAccepted = true;
+					m = new Message();
+					v = new Window();
+					panel = new Panel();
+					v.getContentPane().removeAll();
+					v.getPestañas().add(panel);
+					v.getContentPane().add(v.getPestañas());
+					v.getPestañas().setTitleAt(0, "Pestaña 1");
+					v.repaint();
+					panel.getMessageArea().append("Esperando que un agente tome el chat...");
+					panel.getTextField().setEnabled(false);
 					try {
 						var socket = new Socket(adressServer, puerto);
 						in = new DataInputStream(socket.getInputStream());
@@ -46,10 +49,10 @@ public class Ciudadano  {
 						panel.getTextField().addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
 								try {
-									panel.getMessageArea().append("\nUsted: "+panel.getTextField().getText());
-									out.writeUTF("Ciudadano: "+panel.getTextField().getText());
+									panel.getMessageArea().append("\nUsted: " + panel.getTextField().getText());
+									out.writeUTF("\nCiudadano: " + panel.getTextField().getText());
 									out.flush();
-									
+
 								} catch (IOException e1) {
 									e1.printStackTrace();
 								}
@@ -58,15 +61,19 @@ public class Ciudadano  {
 						});
 						while (true) {
 							var line = in.readUTF();
-							panel.getMessageArea().append(line + "\n");
+							if (line.equals("Se acepto el cliente jaja")) {
+								panel.getMessageArea().setText("Un agente se puso en contacto. puede escribir");
+								panel.getTextField().setEnabled(true);
+							} else {
+								panel.getMessageArea().append(line);
+							}
 						}
-					} catch (UnknownHostException e) {
-						e.printStackTrace();
-					} catch (ConnectException e1) {
+					} 
+					catch (ConnectException e1) {
 						m.message("No hay mas agentes disponibles");
 						isAccepted = true;
-						e1.printStackTrace();
 					} catch (Exception e) {
+						e.printStackTrace();
 						isAccepted = false;
 						puerto += 1;
 					} finally {
