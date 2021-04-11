@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.util.Calendar;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -12,14 +13,12 @@ import javax.swing.JTextField;
 import main.RunCiudadano;
 
 public class Window extends JFrame {
-
-	
-	JTabbedPane pestañas;
+	JTabbedPane pestanas;
+	//Inicia la ventana
 	public Window() {
-		
 		setSize(550, 400);
 		setLayout(new BorderLayout());
-		pestañas = new JTabbedPane();
+		pestanas = new JTabbedPane();
 		setLocationRelativeTo(null);
 		setVisible(true);
 
@@ -27,14 +26,14 @@ public class Window extends JFrame {
 
 	
 
-	public JTabbedPane getPestañas() {
-		return pestañas;
+	public JTabbedPane getPestanas() {
+		return pestanas;
 	}
 
-	public void setPestañas(JTabbedPane pestañas) {
-		this.pestañas = pestañas;
+	public void setPestanas(JTabbedPane pestanas) {
+		this.pestanas = pestanas;
 	}
 
 
-	
+
 }

@@ -18,6 +18,7 @@ public class Panel extends JPanel {
 		inicializarComponentes();
 	}
 
+	//Se crea el textarea y el textfield de la ventana
 	private void inicializarComponentes() {
 		textField = new JTextField(45);
 		messageArea = new JTextArea(16, 45);

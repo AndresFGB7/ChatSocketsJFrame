@@ -16,8 +16,8 @@ import java.util.List;
 public class RunCiudadano {
 	Message m = new Message() ;
 	int numCiudadanos=0;
-	private String[] dataPet = new String[] { "(1) Especie", "(2) Tamaño", "(3) Localidad", "(4) Dirección",
-			"(5) Nombre completo de la persona que reporta", "(6) Teléfono de la persona que reporta ",
+	private String[] dataPet = new String[] { "(1) Especie", "(2) Tamano", "(3) Localidad", "(4) Direccion",
+			"(5) Nombre completo de la persona que reporta", "(6) Telefono de la persona que reporta ",
 			"(7) Email de la persona que reporta", "(8) Comentarios generales" }; // Info to submit of pet
 	private String dataPet2; //To save the submit info
 
@@ -33,8 +33,8 @@ public class RunCiudadano {
 		if (accion.contains("1")) {
 			// Add the case
 			var caso = "";
-			String[] casos = { "(1) Pérdida", "(2) Robo", "(3) Abandono", "(4) Animal peligroso",
-					"(5) Manejo indebido en vía pública" };
+			String[] casos = { "(1) Perdida", "(2) Robo", "(3) Abandono", "(4) Animal peligroso",
+					"(5) Manejo indebido en vIa pUblica" };
 			caso = m.listMessage("Elegir tipo de caso", "caso", casos, 0);
 
 			// Submit the info in dataPet2
@@ -81,7 +81,7 @@ public class RunCiudadano {
 				writer.close();
 				// info added and choose exit or start again
 				String[] yesorno = { "(1) Volver al inicio", "(2) Salir" };
-				var me = m.listMessage("El caso ha sido creado", "Seleccione la opción a continuación:", yesorno, 0);
+				var me = m.listMessage("El caso ha sido creado", "Seleccione la opciï¿½n a continuaciï¿½n:", yesorno, 0);
 				if (me.contains("1")) {
 					new RunCiudadano();
 				} else {
